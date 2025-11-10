@@ -96,4 +96,25 @@ describe("Pharmacy", () => {
       expect(pharmacy.drugs[0].benefit).toBe(50); // 49 + 2 = 51, capped at 50
     });
   });
+
+  describe("Magic Pill", () => {
+    it("should never expire or decrease in benefit", () => {
+      const pharmacy = new Pharmacy([new Drug("Magic Pill", 15, 40)]);
+      pharmacy.updateBenefitValue();
+
+      expect(pharmacy.drugs[0].expiresIn).toBe(15);
+      expect(pharmacy.drugs[0].benefit).toBe(40);
+    });
+
+    it("should remain unchanged after multiple days", () => {
+      const pharmacy = new Pharmacy([new Drug("Magic Pill", 15, 40)]);
+
+      for (let i = 0; i < 10; i++) {
+        pharmacy.updateBenefitValue();
+      }
+
+      expect(pharmacy.drugs[0].expiresIn).toBe(15);
+      expect(pharmacy.drugs[0].benefit).toBe(40);
+    });
+  });
 });
