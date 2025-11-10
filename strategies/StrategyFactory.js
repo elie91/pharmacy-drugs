@@ -1,11 +1,15 @@
 import { NormalDrugStrategy } from "./NormalDrugStrategy.js";
 import { DafalganStrategy } from "./DafalganStrategy.js";
+import { HerbalTeaStrategy } from "./HerbalTeaStrategy.js";
 
 /**
  * Factory for creating drug strategies based on drug name
  */
 export class StrategyFactory {
-  static strategies = new Map([["Dafalgan", DafalganStrategy]]);
+  static strategies = new Map([
+    ["Dafalgan", DafalganStrategy],
+    ["Herbal Tea", HerbalTeaStrategy],
+  ]);
 
   /**
    * Creates the appropriate strategy for a given drug name

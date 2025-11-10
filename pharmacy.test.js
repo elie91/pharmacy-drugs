@@ -64,4 +64,36 @@ describe("Pharmacy", () => {
       expect(pharmacy.drugs[0].benefit).toBe(0); // 3 - 4 = -1, clamped to 0
     });
   });
+
+  describe("Herbal Tea", () => {
+    it("should increase benefit by 1 before expiration", () => {
+      const pharmacy = new Pharmacy([new Drug("Herbal Tea", 10, 5)]);
+      pharmacy.updateBenefitValue();
+
+      expect(pharmacy.drugs[0].expiresIn).toBe(9);
+      expect(pharmacy.drugs[0].benefit).toBe(6);
+    });
+
+    it("should increase benefit by 2 after expiration", () => {
+      const pharmacy = new Pharmacy([new Drug("Herbal Tea", 0, 5)]);
+      pharmacy.updateBenefitValue();
+
+      expect(pharmacy.drugs[0].expiresIn).toBe(-1);
+      expect(pharmacy.drugs[0].benefit).toBe(7); // +2 instead of +1
+    });
+
+    it("should never exceed benefit of 50", () => {
+      const pharmacy = new Pharmacy([new Drug("Herbal Tea", 10, 50)]);
+      pharmacy.updateBenefitValue();
+
+      expect(pharmacy.drugs[0].benefit).toBe(50);
+    });
+
+    it("should cap benefit at 50 even after expiration", () => {
+      const pharmacy = new Pharmacy([new Drug("Herbal Tea", -1, 49)]);
+      pharmacy.updateBenefitValue();
+
+      expect(pharmacy.drugs[0].benefit).toBe(50); // 49 + 2 = 51, capped at 50
+    });
+  });
 });
