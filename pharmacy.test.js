@@ -117,4 +117,45 @@ describe("Pharmacy", () => {
       expect(pharmacy.drugs[0].benefit).toBe(40);
     });
   });
+
+  describe("Fervex", () => {
+    it("should increase benefit by 1 when more than 10 days remain", () => {
+      const pharmacy = new Pharmacy([new Drug("Fervex", 15, 20)]);
+      pharmacy.updateBenefitValue();
+
+      expect(pharmacy.drugs[0].expiresIn).toBe(14);
+      expect(pharmacy.drugs[0].benefit).toBe(21);
+    });
+
+    it("should increase benefit by 2 when 10 days or less remain", () => {
+      const pharmacy = new Pharmacy([new Drug("Fervex", 10, 20)]);
+      pharmacy.updateBenefitValue();
+
+      expect(pharmacy.drugs[0].expiresIn).toBe(9);
+      expect(pharmacy.drugs[0].benefit).toBe(22);
+    });
+
+    it("should increase benefit by 3 when 5 days or less remain", () => {
+      const pharmacy = new Pharmacy([new Drug("Fervex", 5, 20)]);
+      pharmacy.updateBenefitValue();
+
+      expect(pharmacy.drugs[0].expiresIn).toBe(4);
+      expect(pharmacy.drugs[0].benefit).toBe(23);
+    });
+
+    it("should drop benefit to 0 after expiration", () => {
+      const pharmacy = new Pharmacy([new Drug("Fervex", 0, 20)]);
+      pharmacy.updateBenefitValue();
+
+      expect(pharmacy.drugs[0].expiresIn).toBe(-1);
+      expect(pharmacy.drugs[0].benefit).toBe(0);
+    });
+
+    it("should not exceed benefit of 50 before expiration", () => {
+      const pharmacy = new Pharmacy([new Drug("Fervex", 5, 49)]);
+      pharmacy.updateBenefitValue();
+
+      expect(pharmacy.drugs[0].benefit).toBe(50); // 49 + 3 = 52, capped at 50
+    });
+  });
 });

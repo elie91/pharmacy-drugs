@@ -2,6 +2,7 @@ import { NormalDrugStrategy } from "./NormalDrugStrategy.js";
 import { DafalganStrategy } from "./DafalganStrategy.js";
 import { HerbalTeaStrategy } from "./HerbalTeaStrategy.js";
 import { MagicPillStrategy } from "./MagicPillStrategy.js";
+import { FervexStrategy } from "./FervexStrategy.js";
 
 /**
  * Factory for creating drug strategies based on drug name
@@ -11,6 +12,7 @@ export class StrategyFactory {
     ["Dafalgan", DafalganStrategy],
     ["Herbal Tea", HerbalTeaStrategy],
     ["Magic Pill", MagicPillStrategy],
+    ["Fervex", FervexStrategy],
   ]);
 
   /**
