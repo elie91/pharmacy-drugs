@@ -158,4 +158,39 @@ describe("Pharmacy", () => {
       expect(pharmacy.drugs[0].benefit).toBe(50); // 49 + 3 = 52, capped at 50
     });
   });
+
+  describe("Multiple Drugs", () => {
+    it("should update all drugs correctly in one pass", () => {
+      const pharmacy = new Pharmacy([
+        new Drug("Doliprane", 20, 30),
+        new Drug("Herbal Tea", 10, 5),
+        new Drug("Fervex", 12, 35),
+        new Drug("Magic Pill", 15, 40),
+        new Drug("Dafalgan", 10, 20),
+      ]);
+
+      pharmacy.updateBenefitValue();
+
+      expect(pharmacy.drugs[0]).toEqual(new Drug("Doliprane", 19, 29));
+      expect(pharmacy.drugs[1]).toEqual(new Drug("Herbal Tea", 9, 6));
+      expect(pharmacy.drugs[2]).toEqual(new Drug("Fervex", 11, 36));
+      expect(pharmacy.drugs[3]).toEqual(new Drug("Magic Pill", 15, 40));
+      expect(pharmacy.drugs[4]).toEqual(new Drug("Dafalgan", 9, 18));
+    });
+  });
+
+  describe("Edge Cases", () => {
+    it("should handle empty pharmacy", () => {
+      const pharmacy = new Pharmacy([]);
+      expect(pharmacy.updateBenefitValue()).toEqual([]);
+    });
+
+    it("should handle unknown drug as normal drug", () => {
+      const pharmacy = new Pharmacy([new Drug("Unknown Drug", 10, 20)]);
+      pharmacy.updateBenefitValue();
+
+      expect(pharmacy.drugs[0].expiresIn).toBe(9);
+      expect(pharmacy.drugs[0].benefit).toBe(19);
+    });
+  });
 });
